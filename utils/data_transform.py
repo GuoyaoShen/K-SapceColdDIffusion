@@ -260,7 +260,12 @@ def apply_mask(data, mask_func):
     data: [Nc,H,W,2]
     mask_func: return [Nc(1),H,W]
     '''
-    mask = mask_func()
+    # mask, _ = mask_func()
+    mask_return = mask_func()
+    if len(mask_return) == 1:
+        mask = mask_func()
+    else:
+        mask, _ = mask_func()
     mask = torch.from_numpy(mask)
     mask = mask[..., None]  # [Nc(1),H,W,1]
     masked_data = data * mask + 0.0  # the + 0.0 removes the sign of the zeros
